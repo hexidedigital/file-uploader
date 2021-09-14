@@ -1,8 +1,8 @@
 {
     "name": "hexide-digital/file-uploader",
-    "description": "file-uploader",
+    "description": "upload a large number of files",
     "minimum-stability": "dev",
-    "license": "mit",
+    "license": "MIT",
     "type": "library",
     "version": "1.0.0",
     "authors": [

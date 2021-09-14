@@ -3,7 +3,7 @@
 Upload a large number of files that will be harmoniously distributed
 in folders, which will allow access even through the terminal
 
-###
+---
 
 Imagine you have a store with goods, each product has a slider
 with photos. While there are not many products, you can easily open 
@@ -13,6 +13,10 @@ Now
 imagine, in one folder there are more than 8 thousand (or more) photos
 of products of users, etc., and you open this folder, no one will have 
 a hard drive and / or little RAM.
+
+# Requirements
+- php ^7.4|^8.0,
+- laravel 8.*
 
 # Installation
 
