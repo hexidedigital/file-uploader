@@ -54,4 +54,16 @@ His arguments
 for one directory for the product, that you can say the product id and `image` 
 will be saved near other product images or files,
 
+# Can I hire you guys?
+Yes! Say hi: [hello@hexide-digital.com](mailto:hello@hexide-digital.com)
+We will be happy to work with you! Other [work we’ve done](https://hexide-digital.com/)
+## Follow us
+
+Stay up to date with the latest Vuestic news!
+Follow us on [LinkedIn](https://www.linkedin.com/company/hexide-digital) 
+or [Facebook](https://www.facebook.com/hexide.digital)
+
+
+# License
+
 
