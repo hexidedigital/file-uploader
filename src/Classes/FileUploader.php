@@ -7,6 +7,11 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
+
+/**
+ * Class FileUploader
+ * @package HexideDigital\FileUploader\Classes
+ */
 class FileUploader
 {
 
@@ -15,12 +20,20 @@ class FileUploader
      */
     private string $disk = 'public';
 
+    /**
+     * @param string $disk
+     * @return $this
+     */
     public function disk(string $disk): self
     {
         $this->disk = $disk;
         return $this;
     }
 
+    /**
+     * @param string|null $path
+     * @return string
+     */
     public function url(?string $path): string
     {
         if(empty($path)) return '';
@@ -30,12 +43,20 @@ class FileUploader
         return Storage::disk($this->disk)->url($path);
     }
 
+    /**
+     * @param string|null $path
+     * @return bool
+     */
     public function exists(?string $path): bool
     {
         $path = $this->_clearPath($path);
         return Storage::disk($this->disk)->exists($path);
     }
 
+    /**
+     * @param string|null $path
+     * @return bool
+     */
     public function delete(?string $path): bool
     {
         $path = $this->_clearPath($path);
@@ -62,6 +83,11 @@ class FileUploader
         return Storage::disk($this->disk)->putFile($path, new File($file->getPathname())) ?? null;
     }
 
+    /**
+     * @param string $from
+     * @param string $to
+     * @return bool
+     */
     public function move(string $from, string $to): bool
     {
         $from = $this->_clearPath($from);
@@ -71,6 +97,11 @@ class FileUploader
         return Storage::disk($this->disk)->move($from, $to);
     }
 
+    /**
+     * @param string $root
+     * @param string|null $uniq_id
+     * @return string
+     */
     private function _preparePath(string $root, ?string $uniq_id = null): string
     {
         $hash = md5($uniq_id ?? Str::random());
@@ -81,6 +112,10 @@ class FileUploader
         return $root . '/' . $a . '/' . $b;
     }
 
+    /**
+     * @param string $link
+     * @return string
+     */
     private function _prepareToMove(string $link): string
     {
         $link = explode('/', $link);
@@ -90,11 +125,20 @@ class FileUploader
         return $link;
     }
 
+    /**
+     * @param string $path
+     * @return array|string|string[]
+     */
     private function _clearPath(string $path)
     {
         return str_replace('/storage','', $path);
     }
 
+    /**
+     * @param $name
+     * @param array $arguments
+     * @return $this
+     */
     public function __call($name, array $arguments)
     {
         return new static();
