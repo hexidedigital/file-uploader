@@ -1,0 +1,24 @@
+{
+    "name": "hexide-digital/file-uploader",
+    "description": "file-uploader",
+    "minimum-stability": "dev",
+    "license": "mit",
+    "type": "library",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "Oleksandr-Moik",
+            "email": "sashamoik2016@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "HexideDigital\\FileUploader\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^7.4|^8.0",
+        "illuminate/filesystem": "^8.0",
+        "illuminate/http": "^8.0"
+    }
+}
