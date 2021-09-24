@@ -45,7 +45,7 @@ trait FileUploadingTrait
         }
 
         if (empty($module)) {
-            $module = $this->module ?? '';
+            $module = $this->module ?? null;
         }
 
         if (empty($type)) {
@@ -55,6 +55,10 @@ trait FileUploadingTrait
         return FileUploader::put($image, $type, $module, $uniq_id) ?? null;
     }
 
+    /**
+     * @param string|null $path
+     * @return bool
+     */
     public function deleteImage(?string $path): bool
     {
         return FileUploader::delete($path);
@@ -67,15 +71,17 @@ trait FileUploadingTrait
      * [
      *  'field_key' => 'image',
      *  'folder' => 'images',
+     *  'module' => null,
      * ]
      * @return bool
      */
-    public function handleOneImage(Request $request, ?Model $model = null, array $options = [])
+    public function handleOneImage(Request $request, ?Model $model = null, array $options = []): bool
     {
         $path = false;
 
         if(empty($options['field_key'])) $options['field_key'] = 'image';
         if(empty($options['folder'])) $options['folder'] = 'images';
+        if(empty($options['module']) && $model) $options['module'] = $model->getTable() ?? null;
 
         $old_path = $model->{$options['field_key']} ?? null;
 
@@ -84,7 +90,8 @@ trait FileUploadingTrait
                 $request->file('image'),
                 $request->input('slug'),
                 $old_path,
-                $options['folder']
+                $options['folder'],
+                $options['module']??null,
             );
         }
 
