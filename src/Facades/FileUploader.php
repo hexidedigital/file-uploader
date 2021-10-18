@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Facade;
  */
 class FileUploader extends Facade
 {
-
     /**
      * @return string
      */

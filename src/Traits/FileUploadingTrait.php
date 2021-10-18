@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use HexideDigital\FileUploader\Facades\FileUploader;
+use Illuminate\Support\Arr;
 
 trait FileUploadingTrait
 {
-
     /**
      * @param array $images
      * @param string|null $uniq_id to place in the same folder
@@ -79,9 +79,9 @@ trait FileUploadingTrait
     {
         $path = false;
 
-        if(empty($options['field_key'])) $options['field_key'] = 'image';
-        if(empty($options['folder'])) $options['folder'] = 'images';
-        if(empty($options['module']) && $model) $options['module'] = $model->getTable() ?? null;
+        $options['field_key'] = Arr::get($options, 'field_key', 'image');
+        $options['folder'] = Arr::get($options, 'folder', 'images');
+        $options['module'] = Arr::get($options, 'module', $model->getTable() ?? null);
 
         $old_path = $model->{$options['field_key']} ?? null;
 

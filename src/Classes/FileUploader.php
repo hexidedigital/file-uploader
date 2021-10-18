@@ -49,6 +49,7 @@ class FileUploader
      */
     public function exists(?string $path): bool
     {
+        if (empty($path)) return false;
         $path = $this->_clearPath($path);
         return Storage::disk($this->disk)->exists($path);
     }
@@ -59,6 +60,7 @@ class FileUploader
      */
     public function delete(?string $path): bool
     {
+        if (empty($path)) return false;
         $path = $this->_clearPath($path);
         return Storage::disk($this->disk)->delete($path);
     }
@@ -126,12 +128,12 @@ class FileUploader
     }
 
     /**
-     * @param string $path
+     * @param string|null $path
      * @return array|string|string[]
      */
-    private function _clearPath(string $path)
+    private function _clearPath(?string $path)
     {
-        return str_replace('/storage','', $path);
+        return empty($path) ? '': str_replace('/storage','', $path);
     }
 
     /**
