@@ -18,7 +18,7 @@ class FileUploader
     /**
      * @var string
      */
-    private string $disk = 'public';
+    private $disk = 'public';
 
     /**
      * @param string $disk
