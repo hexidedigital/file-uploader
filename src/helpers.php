@@ -19,7 +19,7 @@ if (!function_exists('fu_disk')) {
      * @param string $disk
      * @return \HexideDigital\FileUploader\Classes\FileUploader
      */
-    function fu_url(string $disk): \HexideDigital\FileUploader\Classes\FileUploader
+    function fu_disk(string $disk): \HexideDigital\FileUploader\Classes\FileUploader
     {
         return file_uploader()->disk($disk);
     }
@@ -37,5 +37,3 @@ if (!function_exists('fu_url')) {
         return file_uploader()->url($path);
     }
 }
-
-

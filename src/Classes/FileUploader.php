@@ -14,7 +14,6 @@ use Illuminate\Support\Str;
  */
 class FileUploader
 {
-
     /**
      * @var string
      */
@@ -36,11 +35,24 @@ class FileUploader
      */
     public function url(?string $path): string
     {
-        if(empty($path)) return '';
+        if (empty($path)) return '';
 
         $path = $this->_clearPath($path);
 
         return Storage::disk($this->disk)->url($path);
+    }
+
+    /**
+     * @param string|null $path
+     * @return string
+     */
+    public function path(?string $path): string
+    {
+        if (empty($path)) return '';
+
+        $path = $this->_clearPath($path);
+
+        return Storage::disk($this->disk)->path($path);
     }
 
     /**
@@ -74,11 +86,11 @@ class FileUploader
      */
     public function put(?UploadedFile $file, string $type, ?string $module = null, ?string $uniq_id = null): ?string
     {
-        if(empty($file)){
+        if (empty($file)) {
             return null;
         }
 
-        $module = empty($module)? '': '/'.$module;
+        $module = empty($module) ? '' : '/' . $module;
 
         $path = $this->_preparePath($type . $module, $uniq_id);
 
@@ -133,7 +145,11 @@ class FileUploader
      */
     private function _clearPath(?string $path)
     {
-        return empty($path) ? '': str_replace('/storage','', $path);
+        if (str_starts_with($path, 'http')) {
+            return $path;
+        }
+
+        return str_replace('/storage', '', $path ?: '');
     }
 
     /**
