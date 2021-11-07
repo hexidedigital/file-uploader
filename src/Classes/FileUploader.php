@@ -14,10 +14,13 @@ use Illuminate\Support\Str;
  */
 class FileUploader
 {
-    /**
-     * @var string
-     */
     private $disk = 'public';
+    private $storage;
+
+    public function __construct()
+    {
+        $this->storage = Storage::disk($this->disk);
+    }
 
     /**
      * @param string $disk
@@ -26,7 +29,16 @@ class FileUploader
     public function disk(string $disk): self
     {
         $this->disk = $disk;
+        $this->storage = Storage::disk($this->disk);
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDiskName(): string
+    {
+        return $this->disk;
     }
 
     /**
@@ -36,10 +48,11 @@ class FileUploader
     public function url(?string $path): string
     {
         if (empty($path)) return '';
+        if (Str::startsWith($path, 'http')) return $path;
 
         $path = $this->_clearPath($path);
 
-        return Storage::disk($this->disk)->url($path);
+        return $this->storage->url($path);
     }
 
     /**
@@ -49,10 +62,11 @@ class FileUploader
     public function path(?string $path): string
     {
         if (empty($path)) return '';
+        if (Str::startsWith($path, 'http')) return $path;
 
         $path = $this->_clearPath($path);
 
-        return Storage::disk($this->disk)->path($path);
+        return $this->storage->path($path);
     }
 
     /**
@@ -62,8 +76,10 @@ class FileUploader
     public function exists(?string $path): bool
     {
         if (empty($path)) return false;
+
         $path = $this->_clearPath($path);
-        return Storage::disk($this->disk)->exists($path);
+
+        return $this->storage->exists($path);
     }
 
     /**
@@ -73,8 +89,10 @@ class FileUploader
     public function delete(?string $path): bool
     {
         if (empty($path)) return false;
+
         $path = $this->_clearPath($path);
-        return Storage::disk($this->disk)->delete($path);
+
+        return $this->storage->delete($path);
     }
 
     /**
@@ -94,7 +112,7 @@ class FileUploader
 
         $path = $this->_preparePath($type . $module, $uniq_id);
 
-        return Storage::disk($this->disk)->putFile($path, new File($file->getPathname())) ?? null;
+        return $this->storage->putFile($path, new File($file->getPathname())) ?? null;
     }
 
     /**
@@ -106,9 +124,7 @@ class FileUploader
     {
         $from = $this->_clearPath($from);
 
-        $to = $this->_prepareToMove($to);
-
-        return Storage::disk($this->disk)->move($from, $to);
+        return $this->storage->move($from, $to);
     }
 
     /**
@@ -127,29 +143,12 @@ class FileUploader
     }
 
     /**
-     * @param string $link
-     * @return string
-     */
-    private function _prepareToMove(string $link): string
-    {
-        $link = explode('/', $link);
-        $link = array_splice($link, 4);
-        $link = implode('/', $link);
-
-        return $link;
-    }
-
-    /**
      * @param string|null $path
      * @return array|string|string[]
      */
     private function _clearPath(?string $path)
     {
-        if (str_starts_with($path, 'http')) {
-            return $path;
-        }
-
-        return str_replace('/storage', '', $path ?: '');
+        return str_replace('storage/', '', $path ?: '');
     }
 
     /**
