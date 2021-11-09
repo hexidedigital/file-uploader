@@ -67,22 +67,6 @@ class FileUploaderTest extends BaseTestCase
         $this->assertStringStartsWith('http', $fu_path);
     }
 
-    public function test_move_method()
-    {
-        $from = 'path/from/image.png';
-        $to = 'path/to/image.png';
-
-        $this->storage->put($from, '');
-
-        $this->assertTrue($this->storage->has($from));
-        $this->assertFalse($this->storage->has($to));
-
-        $this->fu->move($from, $to);
-
-        $this->assertFalse($this->storage->has($from));
-        $this->assertTrue($this->storage->has($to));
-    }
-
     public function test_url_method()
     {
         $path = 'path/to/image.png';
@@ -94,17 +78,4 @@ class FileUploaderTest extends BaseTestCase
         $this->assertStringContainsString('/storage/', $image_url);
         $this->assertEquals('/storage/'.$path, $image_url);
     }
-
-    public function test_delete_method()
-    {
-        $path = 'path/to/image.png';
-        $this->storage->put($path, '');
-
-        $this->assertTrue($this->storage->has($path));
-
-        $this->fu->delete($path);
-
-        $this->assertFalse($this->storage->has($path));
-    }
-
 }

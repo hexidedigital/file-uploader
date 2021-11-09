@@ -42,6 +42,10 @@ class FileUploader
     }
 
     /**
+     * Get url for specified driver
+     *
+     * See url configs for each driver in filesystem.php
+     *
      * @param string|null $path
      * @return string
      */
@@ -56,6 +60,8 @@ class FileUploader
     }
 
     /**
+     * Get full path from system root
+     *
      * @param string|null $path
      * @return string
      */
@@ -70,39 +76,16 @@ class FileUploader
     }
 
     /**
-     * @param string|null $path
-     * @return bool
-     */
-    public function exists(?string $path): bool
-    {
-        if (empty($path)) return false;
-
-        $path = $this->_clearPath($path);
-
-        return $this->storage->exists($path);
-    }
-
-    /**
-     * @param string|null $path
-     * @return bool
-     */
-    public function delete(?string $path): bool
-    {
-        if (empty($path)) return false;
-
-        $path = $this->_clearPath($path);
-
-        return $this->storage->delete($path);
-    }
-
-    /**
-     * @param UploadedFile|null $file
-     * @param string $type
-     * @param string|null $module
-     * @param string|null $uniq_id
+     * Put file into nested path
+     *
+     * @param UploadedFile|File|null $file
+     * @param string $type directory that will contain the files
+     * @param string|null $module name of module for separate files if type directory
+     * @param string|null $uniq_id for generating same nested path
+     *
      * @return string|null
      */
-    public function put(?UploadedFile $file, string $type, ?string $module = null, ?string $uniq_id = null): ?string
+    public function put($file, string $type, ?string $module = null, ?string $uniq_id = null): ?string
     {
         if (empty($file)) {
             return null;
@@ -112,22 +95,12 @@ class FileUploader
 
         $path = $this->_preparePath($type . $module, $uniq_id);
 
-        return $this->storage->putFile($path, new File($file->getPathname())) ?? null;
+        return $this->storage->putFile($path, new File($file->getPathname())) ?: null;
     }
 
     /**
-     * @param string $from
-     * @param string $to
-     * @return bool
-     */
-    public function move(string $from, string $to): bool
-    {
-        $from = $this->_clearPath($from);
-
-        return $this->storage->move($from, $to);
-    }
-
-    /**
+     * Preparing of nested folders based on uniq key or random key
+     *
      * @param string $root
      * @param string|null $uniq_id
      * @return string
@@ -143,6 +116,8 @@ class FileUploader
     }
 
     /**
+     * Remove storage prepend string from path
+     *
      * @param string|null $path
      * @return array|string|string[]
      */
