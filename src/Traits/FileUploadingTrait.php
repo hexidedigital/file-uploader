@@ -41,7 +41,7 @@ trait FileUploadingTrait
                               string $type = null, string $module = null): ?string
     {
         if (!empty($old_path)) {
-            $this->deleteImage($old_path);
+            \Storage::disk('public')->delete($old_path);
         }
 
         if (empty($module)) {
@@ -56,15 +56,6 @@ trait FileUploadingTrait
     }
 
     /**
-     * @param string|null $path
-     * @return bool
-     */
-    public function deleteImage(?string $path): bool
-    {
-        return FileUploader::delete($path);
-    }
-
-    /**
      * @param Request $request
      * @param Model|null $model
      * @param array $options =
@@ -75,7 +66,7 @@ trait FileUploadingTrait
      * ]
      * @return bool
      */
-    public function handleOneImage(Request $request, ?Model $model = null, array $options = []): bool
+    public function handleOneImage(Request $request, ?Model $model = null, array $options = [])
     {
         $path = false;
 
@@ -85,10 +76,10 @@ trait FileUploadingTrait
 
         $old_path = $model->{$options['field_key']} ?? null;
 
-        if ($request->hasFile('image') || $request->input('isRemoveImage', false)) {
+        if ($request->hasFile($options['field_key']) || $request->input('isRemoveImage', false)) {
             $path = $this->saveImage(
-                $request->file('image'),
-                $request->input('slug'),
+                $request->file($options['field_key']),
+                $model->id ?? null,
                 $old_path,
                 $options['folder'],
                 $options['module']??null,
