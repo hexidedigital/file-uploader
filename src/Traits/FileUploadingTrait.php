@@ -56,15 +56,12 @@ trait FileUploadingTrait
     }
 
     /**
+     * options [ 'field_key' => 'image', 'folder' => 'images', 'module' => null, ]
+     *
      * @param Request $request
      * @param Model|null $model
-     * @param array $options =
-     * [
-     *  'field_key' => 'image',
-     *  'folder' => 'images',
-     *  'module' => null,
-     * ]
-     * @return bool
+     * @param array $options
+     * @return false|string|null
      */
     public function handleOneImage(Request $request, ?Model $model = null, array $options = [])
     {
