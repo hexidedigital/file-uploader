@@ -7,11 +7,6 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-
-/**
- * Class FileUploader
- * @package HexideDigital\FileUploader\Classes
- */
 class FileUploader
 {
     private $disk = 'public';
@@ -22,20 +17,14 @@ class FileUploader
         $this->storage = Storage::disk($this->disk);
     }
 
-    /**
-     * @param string $disk
-     * @return $this
-     */
     public function disk(string $disk): self
     {
         $this->disk = $disk;
         $this->storage = Storage::disk($this->disk);
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getDiskName(): string
     {
         return $this->disk;
@@ -45,9 +34,6 @@ class FileUploader
      * Get url for specified driver
      *
      * See url configs for each driver in filesystem.php
-     *
-     * @param string|null $path
-     * @return string
      */
     public function url(?string $path): string
     {
@@ -59,12 +45,7 @@ class FileUploader
         return $this->storage->url($path);
     }
 
-    /**
-     * Get full path from system root
-     *
-     * @param string|null $path
-     * @return string
-     */
+    /** Get full path from system root */
     public function path(?string $path): string
     {
         if (empty($path)) return '';
@@ -105,7 +86,7 @@ class FileUploader
      * @param string|null $uniq_id
      * @return string
      */
-    private function _preparePath(string $root, ?string $uniq_id = null): string
+    public function _preparePath(string $root, ?string $uniq_id = null): string
     {
         $hash = md5($uniq_id ?? Str::random());
 
@@ -115,13 +96,8 @@ class FileUploader
         return $root . '/' . $a . '/' . $b;
     }
 
-    /**
-     * Remove storage prepend string from path
-     *
-     * @param string|null $path
-     * @return array|string|string[]
-     */
-    private function _clearPath(?string $path)
+    /** Remove storage prepend string from path */
+    public function _clearPath(?string $path): string
     {
         return str_replace('storage/', '', $path ?: '');
     }
